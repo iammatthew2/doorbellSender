@@ -1,0 +1,22 @@
+{
+  "name": "doorbell",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "author": "matthew.villeneuve@gmail.com",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rm -rf .dist/",
+    "build": "tsc",
+    "watch": "tsc -w",
+    "start": "node dist/index.js",
+    "roll": "nodemon dist/index.js"
+  },
+  "dependencies": {
+    "@types/node": "^10.12.0",
+    "epoll": "https://github.com/iammatthew2/epoll.git",
+
+    "dotenv": "^6.1.0",
+    "onoff": "^3.2.2",
+    "typescript": "^3.1.3"
+  }
+}
