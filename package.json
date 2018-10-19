@@ -12,11 +12,15 @@
     "roll": "nodemon dist/index.js"
   },
   "dependencies": {
+    "@types/chai": "^4.1.6",
+    "@types/mocha": "^5.2.5",
     "@types/node": "^10.12.0",
-    "epoll": "https://github.com/iammatthew2/epoll.git",
-
+    "chai": "^4.2.0",
     "dotenv": "^6.1.0",
+    "epoll": "https://github.com/iammatthew2/epoll.git",
+    "mocha": "^5.2.0",
     "onoff": "^3.2.2",
+    "ts-node": "^7.0.1",
     "typescript": "^3.1.3"
   }
 }
