@@ -1,20 +1,25 @@
-import { Gpio, Direction } from 'onoff';
+import { Gpio, Direction} from 'onoff';
 import { eventBus } from './eventBus';
 import { constants } from './constants';
 
-function safeGpio(gpio: number, direction: Direction, edge?: String, options?: Object): Gpio {
+export const safeGpio = (gpio: number, direction: Direction, edge?: String, options?: Object): Gpio => {
   if (Gpio.accessable) {
     return new Gpio(gpio, direction, edge, options );
   } else {
     // @ts-ignore
     return {
-      watch: (cb) => {}
+      watch: (cb) => {},
+      readSync: () => {return 1},
+      writeSync: () => {}
     }
   }
 }
 
+/**
+ * start the button watcher
+ */
 function init () {
-  const button = safeGpio(4, 'in', 'both', { debounceTimeout: 100 });
+  const button = safeGpio(constants.pins.button, 'in', 'both', { debounceTimeout: 100 });
 
   button.watch((err, value) => {
     if (err) {
@@ -29,22 +34,4 @@ function init () {
 
 };
 
-function getPinState(pin: number): String {
-  return "someState"
-}
-
-function toggleLed(pin: number, delay?: Number) {
-
-  const state = getPinState(pin);
-
-  if (state === 'in') {
-    safeGpio(pin, 'out', undefined);
-  } else {
-    safeGpio(pin, 'in');
-
-  }
-}
-
 init();
-
-module.exports = { toggleLed }

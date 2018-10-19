@@ -9,18 +9,26 @@
     "build": "tsc",
     "watch": "tsc -w",
     "start": "node dist/index.js",
-    "roll": "nodemon dist/index.js"
+    "roll": "nodemon dist/index.js",
+    "test": "mocha -r ts-node/register src/**/*.spec.ts --watch-extensions ts --watch --colors"
   },
   "dependencies": {
     "@types/chai": "^4.1.6",
     "@types/mocha": "^5.2.5",
+    "@types/nock": "^9.3.0",
     "@types/node": "^10.12.0",
-    "chai": "^4.2.0",
+    "@types/node-fetch": "^2.1.2",
     "dotenv": "^6.1.0",
     "epoll": "https://github.com/iammatthew2/epoll.git",
-    "mocha": "^5.2.0",
+    "nock": "^10.0.1",
+    "node-fetch": "^2.2.0",
     "onoff": "^3.2.2",
     "ts-node": "^7.0.1",
     "typescript": "^3.1.3"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "sinon": "^7.0.0"
   }
 }
