@@ -1,31 +1,23 @@
 import { Gpio, Direction} from 'onoff';
 import { eventBus } from './eventBus';
 import { constants } from './constants';
-
-export const safeGpio = (gpio: number, direction: Direction, edge?: String, options?: Object): Gpio => {
-  if (Gpio.accessable) {
-    return new Gpio(gpio, direction, edge, options );
-  } else {
-    // @ts-ignore
-    return {
-      watch: (cb) => {},
-      readSync: () => {return 1},
-      writeSync: () => {}
-    }
-  }
-}
+import logger from './logger';
 
 /**
  * start the button watcher
  */
-function init () {
+export const watchButton = () => {
   const button = safeGpio(constants.pins.button, 'in', 'both', { debounceTimeout: 100 });
+
+  logger.info(`button.watch: start watcher`);
 
   button.watch((err, value) => {
     if (err) {
+      logger.error(`button.watch err: ${err}`);
       throw err;
     }
-    eventBus.emit(constants.events);
+    logger.info(`button.watch: firing ${constants.events.BUTTON_PRESSED}`);
+    eventBus.emit(constants.events.BUTTON_PRESSED);
   });
 
   process.on('SIGINT', () => {
@@ -33,5 +25,23 @@ function init () {
   });
 
 };
+export const safeGpio = (gpio: number, direction: Direction, edge?: String, options?: Object): Gpio => {
+  if (Gpio.accessable) {
+    logger.info(`Gpio is available. Setting up pin: ${gpio}`);
 
-init();
+    return new Gpio(gpio, direction, edge, options );
+  } else {
+    // @ts-ignore
+    return {
+      watch: (cb) => {
+        setInterval(() => {
+          logger.info('keep app alive');
+        }, 100000);
+
+      },
+      unexport: () => {},
+      readSync: () => {return 1},
+      writeSync: () => {}
+    }
+  }
+}

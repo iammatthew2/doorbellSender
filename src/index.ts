@@ -2,8 +2,12 @@ require('dotenv').config();
 import { eventBus } from './eventBus';
 import { constants } from './constants';
 import leds from './ledHandler';
+import { watchButton } from './hardware'
 import fetch from 'node-fetch';
 import { Gpio } from './types/onoff';
+import logger from './logger';
+
+watchButton();
 
 const greenLed: Gpio = leds.greenLed;
 const targetUrl = `${process.env.TARGET_URL_BASE}${process.env.TARGET_URL_PARAMS}`;
@@ -19,10 +23,11 @@ function fireHttpRequest() {
         eventBus.emit(constants.events.SUCCESS_GET_REQUEST);
       }
     })
-    .catch( e => console.error(`error firing request: ${e} to: ${targetUrl}`));
+    .catch( e => logger.error(`error firing request: ${e} to: ${targetUrl}`));
 }
 
 eventBus.on(constants.events.SUCCESS_GET_REQUEST, () => {
+  logger.info('successful button press');
   leds.shortTimeOnLed(greenLed);
 });
 

@@ -32,7 +32,10 @@ first on your pc/mac and then porting it to your Raspberry Pi once you have it w
 - make sure you have node and yarn installed
 - git clone this repo
 - create a file `.env` in the top-level directory of your app
-- in `.env` add a line like this populated with your target url: TARGET_URL=your_url_here
+- in `.env` two lines like so populated with your target url details:
+  - TARGET_URL_BASE=BASE_URL_HERE
+  - TARGET_URL_PARAMS=/api/DoorBell-HttpTrigger?code=oSla/iXCyVJVdhpbUWhcbzZUHRa65pBCaeWDWnz7ViMYNh6cMJoEoQ==&name=backGate
+- when running this on your Raspbery Pi, if you want to save the logs to disk be sure to set your NODE_ENV to `production`
 - run the app: `yarn build && yarn start`
 
 ### How do you run this at startup

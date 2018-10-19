@@ -1,6 +1,8 @@
 import { safeGpio } from './hardware'
 import { constants } from './constants';
 import { Gpio } from 'onoff';
+import logger from './logger';
+
 
 let blinkingLed;
 const blinkInterval = 500;
@@ -19,20 +21,28 @@ const toggleLed = (led: Gpio, forceState?: number) =>{
 }
 
 const startBlinkingLed = (led: Gpio) => {
+  logger.info('start startBlinkingLed fired');
   blinkingLed = setInterval(() => toggleLed(greenLed), blinkInterval);
 }
 
 const stopBlinkingLed = (led: Gpio) => {
+  logger.info('start stopBlinkingLed fired');
   toggleLed(greenLed, OFF);
   clearInterval(blinkingLed);
 }
 
 const shortTimeOnLed = (led: Gpio) => {
+  logger.info('start shortTimeOnLed fired');
   toggleLed(greenLed, ON);
-  setTimeout(() => toggleLed(greenLed, OFF), 5000)
+  setTimeout(() => {
+    logger.info('shortTimeOnLed setTimeout called.');
+    toggleLed(greenLed, OFF);
+  }, 5000)
 }
 
 let ledHandler;
+
+logger.info('init the ledHandler');
 
 export default ledHandler = {
   greenLed,
