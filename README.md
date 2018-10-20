@@ -1,11 +1,11 @@
 # doorbellSender
 
 This app is the sender part of doorbellReceiver. These are a pair of
-apps used to trigger an event emitted from one [raspberry pi](https://www.raspberrypi.org/) to another
+apps used to trigger an event emitted from one [Raspberry Pi](https://www.raspberrypi.org/) to another
 without regards for what network they are running on. Azure IoT hub is
-the connection point for both apps. There are surely simpler options, namely
+the connection point for both apps. There are simpler options, namely
 running an Express Server - but the approach taken here does not require an
-exposed port and is provides a chance to play with Azure.
+exposed port and it provides a chance to play with Azure.
 
 doorbellSender is written in [Typescript](https://www.typescriptlang.org/) running on Node.js.
 
