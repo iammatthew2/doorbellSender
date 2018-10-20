@@ -29,6 +29,8 @@ there are no button press events fired.
 This app can be setup very quickly to have it hitting a dummy url. I recommend running it
 first on your pc/mac and then porting it to your Raspberry Pi once you have it working.
 
+___ epoll (dep of on/off) is not compatable with yarn ___
+
 - make sure you have node and yarn installed
 - git clone this repo
 - create a file `.env` in the top-level directory of your app

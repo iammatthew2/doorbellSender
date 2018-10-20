@@ -19,7 +19,7 @@
     "@types/node": "^10.12.0",
     "@types/node-fetch": "^2.1.2",
     "dotenv": "^6.1.0",
-    "epoll": "https://github.com/iammatthew2/epoll.git",
+    "epoll": "^2.0.6",
     "nock": "^10.0.1",
     "node-fetch": "^2.2.0",
     "onoff": "^3.2.2",

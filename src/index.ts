@@ -20,6 +20,8 @@ function fireHttpRequest() {
       if (response.status !== 200) {
         throw Error;
       } else {
+        logger.info('successful button press');
+        leds.shortTimeOnLed(greenLed);
         eventBus.emit(constants.events.SUCCESS_GET_REQUEST);
       }
     })
@@ -36,3 +38,5 @@ export const init = ()=> {
     fireHttpRequest();
   })
 };
+
+init();
