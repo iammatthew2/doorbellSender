@@ -4,7 +4,7 @@ export const constants = {
     SUCCESS_GET_REQUEST: 'successGetRequest',
   },
   pins: {
-    led: 17,
-    button: 4,
+    led: 4,
+    button: 17,
   }
 }

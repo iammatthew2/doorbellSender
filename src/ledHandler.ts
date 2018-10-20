@@ -21,21 +21,21 @@ const toggleLed = (led: Gpio, forceState?: number) =>{
 }
 
 const startBlinkingLed = (led: Gpio) => {
-  logger.info('start startBlinkingLed fired');
-  blinkingLed = setInterval(() => toggleLed(greenLed), blinkInterval);
+  // logger.info('startBlinkingLed');
+  // blinkingLed = setInterval(() => toggleLed(greenLed), blinkInterval);
 }
 
 const stopBlinkingLed = (led: Gpio) => {
-  logger.info('start stopBlinkingLed fired');
-  toggleLed(greenLed, OFF);
-  clearInterval(blinkingLed);
+  // logger.info('stopBlinkingLed');
+  // toggleLed(greenLed, OFF);
+  // clearInterval(blinkingLed);
 }
 
 const shortTimeOnLed = (led: Gpio) => {
   logger.info('start shortTimeOnLed fired');
   toggleLed(greenLed, ON);
   setTimeout(() => {
-    logger.info('shortTimeOnLed setTimeout called.');
+    logger.info('stop shortTimeOnLed - shortTimeOnLed setTimeout called.');
     toggleLed(greenLed, OFF);
   }, 5000)
 }
