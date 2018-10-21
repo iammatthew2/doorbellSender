@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({path: '/home/pi/.env'});
 import { eventBus } from './eventBus';
 import { constants } from './constants';
 import leds from './ledHandler';
@@ -10,23 +10,33 @@ import logger from './logger';
 watchButton();
 
 const greenLed: Gpio = leds.greenLed;
-const targetUrl = `${process.env.TARGET_URL_BASE}${process.env.TARGET_URL_PARAMS}`;
-let requestUnderWay: Boolean;
+
+
+// i moved this urls out of .env becuase of context issues. Prob good now.
+const TARGET_URL_BASE = 'https://funcappwin.azurewebsites.net';
+const TARGET_URL_PARAMS = '/api/DoorBell-HttpTrigger?code=oSla/iXCyVJVdhpbUWhcbzZUHRa65pBCaeWDWnz7ViMYNh6cMJoEoQ==&name=backGate';
+
+const targetUrl = `${TARGET_URL_BASE}${TARGET_URL_PARAMS}`;
+let requestUnderWay: Boolean = false;
 
 function fireHttpRequest() {
   requestUnderWay = true;
-  leds.shortTimeOnLed(greenLed);
-
+  leds.shortTimeOnLed(greenLed, true);
+  logger.info(`firing get request to: ${targetUrl}`);
   fetch(targetUrl, { method: 'GET' })
     .then(response => {
       if (response.status !== 200) {
         throw Error;
       } else {
-        logger.info('successful button press');
+        logger.info('successful http request completed');
       }
       requestUnderWay = false;
     })
-    .catch( e => logger.error(`error firing request: ${e} to: ${targetUrl}`));
+    .catch( e => {
+      requestUnderWay = false;
+      // 
+      logger.error(`error firing request: ${e} to: ${targetUrl}`);
+    });
 }
 
 eventBus.on(constants.events.BUTTON_PRESSED, () => {

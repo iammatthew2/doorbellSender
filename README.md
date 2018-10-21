@@ -45,3 +45,7 @@ ___ epoll (dep of on/off) is not compatable with yarn ___
 - try: <https://raspberrypi.stackexchange.com/questions/13743/how-to-run-a-script-node-js-at-startup>
 - or: <https://weworkweplay.com/play/raspberry-pi-nodejs/>
 - or: <https://stackoverflow.com/questions/21542304/how-to-start-a-node-js-app-on-system-boot#answer-21830512>
+
+this is working: su pi -c 'cd ~/dev/doorbellSender && /usr/bin/node dist/index.js < /dev/null &'
+
+su pi -c 'tmux new-session -d -s "myTempSession" cd ~/dev/doorbellSender && /usr/bin/node dist/index.js'

@@ -7,7 +7,7 @@ import logger from './logger';
  * start the button watcher
  */
 export const watchButton = () => {
-  const button = safeGpio(constants.pins.button, 'in', 'both', { debounceTimeout: 500 });
+  const button = safeGpio(constants.pins.button, 'in', 'both', { debounceTimeout: 250 });
 
   logger.info(`button.watch: start watcher`);
 
