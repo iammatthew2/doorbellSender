@@ -6,6 +6,7 @@ import { watchButton } from './hardware'
 import fetch from 'node-fetch';
 import { Gpio } from './types/onoff';
 import logger from './logger';
+import sendEvent from './sendEvent';
 
 watchButton();
 
@@ -23,20 +24,23 @@ function fireHttpRequest() {
   requestUnderWay = true;
   leds.shortTimeOnLed(greenLed, true);
   logger.info(`firing get request to: ${targetUrl}`);
-  fetch(targetUrl, { method: 'GET' })
-    .then(response => {
-      if (response.status !== 200) {
-        throw Error;
-      } else {
-        logger.info('successful http request completed');
-      }
-      requestUnderWay = false;
-    })
-    .catch( e => {
-      requestUnderWay = false;
-      // 
-      logger.error(`error firing request: ${e} to: ${targetUrl}`);
-    });
+  sendEvent();
+  requestUnderWay = false;
+
+  // fetch(targetUrl, { method: 'GET' })
+  //   .then(response => {
+  //     if (response.status !== 200) {
+  //       throw Error;
+  //     } else {
+  //       logger.info('successful http request completed');
+  //     }
+  //     requestUnderWay = false;
+  //   })
+  //   .catch( e => {
+  //     requestUnderWay = false;
+  //     //   
+  //     logger.error(`error firing request: ${e} to: ${targetUrl}`);
+  //   });
 }
 
 eventBus.on(constants.events.BUTTON_PRESSED, () => {
