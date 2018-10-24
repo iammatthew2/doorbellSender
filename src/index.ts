@@ -26,21 +26,6 @@ function fireHttpRequest() {
   logger.info(`firing get request to: ${targetUrl}`);
   sendEvent();
   requestUnderWay = false;
-
-  // fetch(targetUrl, { method: 'GET' })
-  //   .then(response => {
-  //     if (response.status !== 200) {
-  //       throw Error;
-  //     } else {
-  //       logger.info('successful http request completed');
-  //     }
-  //     requestUnderWay = false;
-  //   })
-  //   .catch( e => {
-  //     requestUnderWay = false;
-  //     //   
-  //     logger.error(`error firing request: ${e} to: ${targetUrl}`);
-  //   });
 }
 
 eventBus.on(constants.events.BUTTON_PRESSED, () => {

@@ -11,7 +11,7 @@ const client = Client.fromConnectionString(connectionString);
 
 // Set the direct method name, payload, and timeout values
 const methodParams = {
-  methodName: 'ringRearGate',
+  methodName: 'ringDoorBell',
   payload: 10, // Number of seconds.
   responseTimeoutInSeconds: 30
 };

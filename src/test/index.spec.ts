@@ -15,7 +15,6 @@ describe('basic app operability', () => {
     nock(process.env.TARGET_URL_BASE)
     .get(process.env.TARGET_URL_PARAMS)
     .reply(200);
-
   });
 
   init();
