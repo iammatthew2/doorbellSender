@@ -26,7 +26,7 @@ export const watchButton = () => {
 
 };
 export const safeGpio = (gpio: number, direction: Direction, edge?: String, options?: Object): Gpio => {
-  if (true || Gpio.accessable) {
+  if (Gpio.accessable) {
     logger.info(`Gpio is available. Setting up pin: ${gpio}`);
 
     return new Gpio(gpio, direction, edge, options );

@@ -3,6 +3,7 @@ import { constants } from './constants';
 import { Gpio } from 'onoff';
 import logger from './logger';
 
+
 const ledPin = constants.pins.led;
 const ON: number = 1;
 const OFF: number = 0;

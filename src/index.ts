@@ -1,9 +1,10 @@
-require('dotenv').config({path: '/home/pi/.env'});
+require('dotenv').config(); // {path: '/home/pi/.env'}
+
+import { ok } from 'assert'
 import { eventBus } from './eventBus';
 import { constants } from './constants';
 import leds from './ledHandler';
 import { watchButton } from './hardware'
-import fetch from 'node-fetch';
 import { Gpio } from './types/onoff';
 import logger from './logger';
 import sendEvent from './sendEvent';
@@ -12,10 +13,10 @@ watchButton();
 
 const greenLed: Gpio = leds.greenLed;
 
-
-// i moved this urls out of .env becuase of context issues. Prob good now.
-const TARGET_URL_BASE = 'https://funcappwin.azurewebsites.net';
-const TARGET_URL_PARAMS = '/api/DoorBell-HttpTrigger?code=oSla/iXCyVJVdhpbUWhcbzZUHRa65pBCaeWDWnz7ViMYNh6cMJoEoQ==&name=backGate';
+ok(process.env.TARGET_URL_BASE, 'TARGET_URL_BASE required');
+const TARGET_URL_BASE = process.env.TARGET_URL_BASE;
+ok(process.env.TARGET_URL_PARAMS, 'TARGET_URL_PARAMS required');
+const TARGET_URL_PARAMS = process.env.TARGET_URL_PARAMS;
 
 const targetUrl = `${TARGET_URL_BASE}${TARGET_URL_PARAMS}`;
 let requestUnderWay: Boolean = false;
