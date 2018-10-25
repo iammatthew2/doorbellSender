@@ -1,6 +1,8 @@
 const Client = require('azure-iothub').Client;
 const assert = require('assert');
 import logger from './logger';
+import { eventBus } from './eventBus';
+import { constants } from './constants';
 
 assert(process.env.DEVICE_ID, 'DEVICE_ID required');
 const deviceId = process.env.DEVICE_ID;
@@ -15,7 +17,9 @@ const methodParams = {
 };
 
 const callMethod = () => {
+  logger.info(`Attempting to call ${methodParams.methodName}`);
   client.invokeDeviceMethod(deviceId, methodParams, function(err, result) {
+    eventBus.emit(constants.events.BEGIN_REQUEST);
     if (err) {
       logger.error(
         `Failed to invoke method ${methodParams.methodName} - err: ${
@@ -23,8 +27,9 @@ const callMethod = () => {
         }`
       );
     } else {
+      eventBus.emit(constants.events.SUCCESS_REQUEST);
       logger.info(
-        `Response: ${methodParams.methodName} ${deviceId}: ${JSON.stringify(
+        `Success: ${methodParams.methodName} ${deviceId}: ${JSON.stringify(
           result,
           null,
           2

@@ -1,43 +1,33 @@
 require('dotenv').config(); // {path: '/home/pi/.env'}
 
-import { ok } from 'assert'
+import { shortTimeOnLed, greenLed } from './ledHandler';
 import { eventBus } from './eventBus';
 import { constants } from './constants';
-import leds from './ledHandler';
-import { watchButton } from './hardware'
-import { Gpio } from './types/onoff';
-import logger from './logger';
+import { watchButton } from './buttonHandler';
 import sendEvent from './sendEvent';
+import logger from './logger';
+const events = constants.events;
 
-watchButton();
+logger.info('doorbellSender is starting up');
 
-const greenLed: Gpio = leds.greenLed;
+export const init = () => {
+  watchButton();
 
-ok(process.env.TARGET_URL_BASE, 'TARGET_URL_BASE required');
-const TARGET_URL_BASE = process.env.TARGET_URL_BASE;
-ok(process.env.TARGET_URL_PARAMS, 'TARGET_URL_PARAMS required');
-const TARGET_URL_PARAMS = process.env.TARGET_URL_PARAMS;
+  let allowNewRequest: Boolean = true;
+  
+  eventBus.on(events.LED_TURNED_OFF, () => allowNewRequest = true);
 
-const targetUrl = `${TARGET_URL_BASE}${TARGET_URL_PARAMS}`;
-let requestUnderWay: Boolean = false;
+  eventBus.on(events.BEGIN_REQUEST, () => allowNewRequest = false);
 
-function fireHttpRequest() {
-  requestUnderWay = true;
-  leds.shortTimeOnLed(greenLed, true);
-  logger.info(`firing get request to: ${targetUrl}`);
-  sendEvent();
-  requestUnderWay = false;
+  eventBus.on(events.SUCCESS_REQUEST, () => shortTimeOnLed(greenLed, true));
+
+  eventBus.on(events.BUTTON_PRESSED, () => {
+    logger.info('button pressed event fired');
+    if (allowNewRequest) {
+      sendEvent();
+    }
+  });
 }
 
-eventBus.on(constants.events.BUTTON_PRESSED, () => {
-  if (!requestUnderWay) {
-    fireHttpRequest();
-  }
-})
-
-export const init = ()=> {
-
-};
-
-
 init();
+logger.info('doorbellSender is running');
