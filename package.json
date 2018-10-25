@@ -22,7 +22,7 @@
     "dotenv": "^6.1.0",
     "nock": "^10.0.1",
     "node-fetch": "^2.2.0",
-    "onoff": "^3.2.2",
+    "onoff": "https://github.com/iammatthew2/onoff.git",
     "epoll": "^2.0.4",
     "ts-node": "^7.0.1",
     "typescript": "^3.1.3",
