@@ -4,23 +4,38 @@ import { Gpio } from 'onoff';
 import logger from './logger';
 import { eventBus } from './eventBus';
 
-
 const ledPin = constants.pins.led;
 const ON: number = 1;
 const OFF: number = 0;
 
+let blinkLedTimer: NodeJS.Timeout;
+
 export const greenLed: Gpio = safeGpio(ledPin, 'out');
 
-export const shortTimeOnLed = (led: Gpio, setTimer?: Boolean) => {
+export const blinkLed = (led: Gpio, rate: number) => {
+  killBlinkLed(led);
+  blinkLedTimer = setInterval(() => {
+    led.writeSync(led.readSync()^1);
+  }, rate);
+}
+
+export const killBlinkLed = (led: Gpio) => {
+  logger.info('killing blinking');
+
+  clearInterval(blinkLedTimer);
+  led.writeSync(OFF);
+  logger.info('it was killed');
+
+}
+
+export const shortTimeOnLed = (led: Gpio) => {
   logger.info('start shortTimeOnLed fired - turn led on');
   led.writeSync(ON);
-  if (setTimer) {
-    setTimeout(() => {
-      logger.info('stop shortTimeOnLed - shortTimeOnLed setTimeout called.');
-      led.writeSync(OFF);
-      eventBus.emit(constants.events.LED_TURNED_OFF);
-    }, 3000);
-  }
+  setTimeout(() => {
+    logger.info('stop shortTimeOnLed - shortTimeOnLed setTimeout called.');
+    led.writeSync(OFF);
+    eventBus.emit(constants.events.LED_SEQUENCE_COMPLETE);
+  }, 3000);
 }
 
 logger.info('ledHandler is running');

@@ -3,6 +3,14 @@ import { eventBus } from "./eventBus";
 import { constants } from "./constants";
 import logger from "./logger";
 
+let throttleOpen:Boolean = true;
+
+function resetThrottle() {
+  throttleOpen = false;
+  setTimeout(() => {
+    throttleOpen = true;
+  }, 1000)
+}
 /**
  * start the button watcher
  */
@@ -19,7 +27,10 @@ export const watchButton = () => {
       throw err;
     }
     logger.info(`button.watch: firing ${constants.events.BUTTON_PRESSED}`);
-    eventBus.emit(constants.events.BUTTON_PRESSED);
+    if (throttleOpen) {
+      resetThrottle();
+      eventBus.emit(constants.events.BUTTON_PRESSED);
+    }
   });
 
   process.on("SIGINT", () => {

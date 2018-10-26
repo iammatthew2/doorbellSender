@@ -10,17 +10,21 @@ const deviceId = process.env.DEVICE_ID;
 assert(process.env.CONNECTION_STRING, 'CONNECTION_STRING required');
 const client = Client.fromConnectionString(process.env.CONNECTION_STRING);
 
+assert(process.env.METHOD_TO_INVOKE, 'METHOD_TO_INVOKE required');
+
 const methodParams = {
-  methodName: 'ringDoorBell',
+  methodName: process.env.METHOD_TO_INVOKE,
   payload: 10,
   responseTimeoutInSeconds: 30
 };
 
-const callMethod = () => {
+const callDoorbellReceiver = () => {
   logger.info(`Attempting to call ${methodParams.methodName}`);
   client.invokeDeviceMethod(deviceId, methodParams, function(err, result) {
     eventBus.emit(constants.events.BEGIN_REQUEST);
     if (err) {
+      eventBus.emit(constants.events.FAILED_REQUEST);
+
       logger.error(
         `Failed to invoke method ${methodParams.methodName} - err: ${
           err.message
@@ -39,4 +43,4 @@ const callMethod = () => {
   });
 };
 
-export default callMethod;
+export default callDoorbellReceiver;
