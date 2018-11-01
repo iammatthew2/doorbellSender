@@ -1,7 +1,7 @@
 import { safeGpio } from './safeGpio';
-import { eventBus } from "./eventBus";
-import { constants } from "./constants";
-import logger from "./logger";
+import { eventBus } from './eventBus';
+import { constants } from './constants';
+import logger from './logger';
 
 let throttleOpen:Boolean = true;
 
@@ -15,7 +15,7 @@ function resetThrottle() {
  * start the button watcher
  */
 export const watchButton = () => {
-  const button = safeGpio(constants.pins.button, "in", "both", {
+  const button = safeGpio(constants.pins.button, 'in', 'both', {
     debounceTimeout: 250
   });
 
@@ -33,7 +33,7 @@ export const watchButton = () => {
     }
   });
 
-  process.on("SIGINT", () => {
+  process.on('SIGINT', () => {
     button.unexport();
   });
 };

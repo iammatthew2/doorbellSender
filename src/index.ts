@@ -1,6 +1,6 @@
 require('dotenv').config(); // {path: '/home/pi/.env'}
 
-import { shortTimeOnLed, greenLed, blinkLed, killBlinkLed } from './ledHandler';
+import { shortTimeOnLed, greenLed } from './ledHandler';
 import { eventBus } from './eventBus';
 import { constants } from './constants';
 import { watchButton } from './buttonHandler';
@@ -10,35 +10,38 @@ const events = constants.events;
 let allowNewRequest: Boolean = true;
 logger.info('doorbellSender is starting up');
 
+
+// assert(process.env.AZURE_IOT_CONNECTION_STRING, 'AZURE_IOT_CONNECTION_STRING required');
+// const client = Client.fromConnectionString(process.env.AZURE_IOT_CONNECTION_STRING, Mqtt);
+
+const appInsights = require("applicationinsights");
+appInsights.setup("a25e339a-81f8-484e-876a-361a225f19ce");
+appInsights.start();
+
+
+
+
 export const init = () => {
   watchButton();
 
   eventBus.on(events.LED_SEQUENCE_COMPLETE, () => allowNewRequest = true);
-  eventBus.on(events.BEGIN_REQUEST, () => allowNewRequest = false);
   eventBus.on(events.SUCCESS_REQUEST, () => {
-    killBlinkLed(greenLed);
-    shortTimeOnLed(greenLed);
+    shortTimeOnLed(greenLed, 3000);
   });
 
   eventBus.on(events.FAILED_REQUEST, () => {
-    logger.info('FAILED_REQUEST event received - start blink for 3 sec');
-    blinkLed(greenLed, 250);
+    logger.info('FAILED_REQUEST event received - led on for 300ms');
+    shortTimeOnLed(greenLed, 100);
     setTimeout(() => {
-      killBlinkLed(greenLed);
-      logger.info('Stopping blink - begin wait 3 sec until new request avail');
-      setTimeout(() => {
-        allowNewRequest = true;
-        logger.info('new request avail');
-      }, 3000);
-    }, 3000);
-    
-
+      allowNewRequest = true;
+      logger.info('new request avail now that 6sec has passed');
+    }, 6000);
   });
 
   eventBus.on(events.BUTTON_PRESSED, () => {
     logger.info('button pressed event fired');
     if (allowNewRequest) {
-      blinkLed(greenLed, 500);
+      allowNewRequest = false;
       ringDoorbell();
     }
   });

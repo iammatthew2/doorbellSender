@@ -28,14 +28,14 @@ export const killBlinkLed = (led: Gpio) => {
 
 }
 
-export const shortTimeOnLed = (led: Gpio) => {
+export const shortTimeOnLed = (led: Gpio, duration: number) => {
   logger.info('start shortTimeOnLed fired - turn led on');
   led.writeSync(ON);
   setTimeout(() => {
     logger.info('stop shortTimeOnLed - shortTimeOnLed setTimeout called.');
     led.writeSync(OFF);
     eventBus.emit(constants.events.LED_SEQUENCE_COMPLETE);
-  }, 3000);
+  }, duration);
 }
 
 logger.info('ledHandler is running');
