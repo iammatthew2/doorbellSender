@@ -6,6 +6,10 @@ export const constants = {
     BEGIN_REQUEST: 'beginRequest',
     FAILED_REQUEST: 'failedRequest',
   },
+  logTypes: {
+    INFO: 'info',
+    ERROR: 'error'
+  },
   pins: {
     led: 4,
     button: 17,

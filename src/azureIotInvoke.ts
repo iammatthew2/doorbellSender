@@ -1,8 +1,10 @@
-const Client = require('azure-iothub').Client;
 const assert = require('assert');
-import logger from './logger';
+import { Client } from 'azure-iothub'
 import { eventBus } from './eventBus';
 import { constants } from './constants';
+import track from './tracker';
+
+const INFO = constants.logTypes.INFO;
 
 assert(process.env.DEVICE_ID, 'DEVICE_ID required');
 const deviceId = process.env.DEVICE_ID;
@@ -18,15 +20,14 @@ const methodParams = {
   responseTimeoutInSeconds: 30
 };
 
-const successOptions:Array<number> = [200, 201, 202];
 
 const callDoorbellReceiver = () => {
-  logger.info(`Attempting to call ${methodParams.methodName}`);
+  track(INFO, `Attempting to call ${methodParams.methodName}`);
   client.invokeDeviceMethod(deviceId, methodParams, function(err, result) {
     if ((result && result.status && result.status === 200) && !err)  {
-      logger.info(`here is the status: ${result.status}`)
+      track(INFO, `here is the status: ${result.status}`)
       eventBus.emit(constants.events.SUCCESS_REQUEST);
-      logger.info(
+      track(INFO, 
         `Success: ${methodParams.methodName} ${deviceId}: ${JSON.stringify(
           result,
           null,
@@ -35,7 +36,7 @@ const callDoorbellReceiver = () => {
       );
     } else {
       eventBus.emit(constants.events.FAILED_REQUEST);
-      logger.info(
+      track(INFO, 
         `Rejected: ${methodParams.methodName} ${deviceId}: ${JSON.stringify(
           result,
           null,
